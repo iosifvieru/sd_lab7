@@ -6,6 +6,7 @@ import java.io.InputStreamReader
 import java.net.ServerSocket
 import java.net.Socket
 import java.util.*
+import kotlin.Comparator
 import kotlin.system.exitProcess
 
 class MessageProcessorMicroservice {
@@ -73,6 +74,11 @@ class MessageProcessorMicroservice {
                 onComplete = {
                     // s-a incheiat primirea tuturor mesajelor
                     ///TODO --- se ordoneaza in functie de data si ora cand mesajele au fost primite
+
+                    val listaSortata = messageQueue.sortedBy{it.timestamp}
+
+                    messageQueue.clear()
+                    messageQueue.addAll(listaSortata)
 
                     // s-au primit toate mesajele de la AuctioneerMicroservice, i se trimite un mesaj pentru a semnala
                     // acest lucru

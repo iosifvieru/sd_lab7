@@ -8,6 +8,7 @@ import java.net.ServerSocket
 import java.net.Socket
 import java.net.SocketTimeoutException
 import java.util.*
+import javax.security.auth.login.LoginException
 import kotlin.collections.ArrayList
 import kotlin.system.exitProcess
 
@@ -19,15 +20,21 @@ class AuctioneerMicroservice {
     private val bidQueue: Queue<Message> = LinkedList<Message>()
     private val bidderConnections: MutableList<Socket> = mutableListOf()
 
+    private lateinit var loggerSocket: Socket
+
     companion object Constants {
         const val MESSAGE_PROCESSOR_HOST = "localhost"
         const val MESSAGE_PROCESSOR_PORT = 1600
         const val AUCTIONEER_PORT = 1500
         const val AUCTION_DURATION: Long = 15_000 // licitatia dureaza 15 secunde
+
+        const val LOGGER_HOST = "localhost"
+        const val LOGGER_PORT = 54545
     }
 
     init {
         auctioneerSocket = ServerSocket(AUCTIONEER_PORT)
+
         auctioneerSocket.setSoTimeout(AUCTION_DURATION.toInt())
         println("AuctioneerMicroservice se executa pe portul: ${auctioneerSocket.localPort}")
         println("Se asteapta oferte de la bidderi...")
@@ -72,6 +79,8 @@ class AuctioneerMicroservice {
                 val message = Message.deserialize(it.toByteArray())
                 println(message)
                 bidQueue.add(message)
+
+
             },
             onComplete = {
                 // licitatia s-a incheiat
@@ -91,7 +100,6 @@ class AuctioneerMicroservice {
                 onNext = {
                     // trimitere mesaje catre procesorul de mesaje
                     messageProcessorSocket.getOutputStream().write(it.serialize())
-                    println("Am trimis mesajul: $it")
                 },
                 onComplete = {
                     println("Am trimis toate ofertele catre MessageProcessor.")
@@ -137,10 +145,29 @@ class AuctioneerMicroservice {
             val losingMessage = Message.create(auctioneerSocket.localSocketAddress.toString(),
                 "Licitatie pierduta...")
 
+            try {
+                loggerSocket = Socket(LOGGER_HOST, LOGGER_PORT)
+
+                loggerSocket.getOutputStream().write(
+                    Message.create("AuctioneerMicroservice", winningMessage.toString()).serialize()
+                )
+
+                loggerSocket.close()
+            } catch (e: Exception){
+                println("Nu m-am putut conecta la logger.")
+            }
+
+
             // se anunta castigatorul
             bidderConnections.forEach {
-                if (it.remoteSocketAddress.toString() == result.sender) {
+
+                val bidderAddress = result.sender.split("-")[1]
+                //println(it.remoteSocketAddress.toString())
+                //println(bidderAddress)
+
+                if (it.remoteSocketAddress.toString() == bidderAddress) {
                     it.getOutputStream().write(winningMessage.serialize())
+
                 } else {
                     it.getOutputStream().write(losingMessage.serialize())
                 }

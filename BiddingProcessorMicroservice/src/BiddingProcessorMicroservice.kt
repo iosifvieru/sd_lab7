@@ -15,10 +15,17 @@ class BiddingProcessorMicroservice {
     private val subscriptions = CompositeDisposable()
     private val processedBidsQueue: Queue<Message> = LinkedList<Message>()
 
+
+    // logging centralizat
+    private lateinit var loggerSocket: Socket
+
     companion object Constants {
         const val BIDDING_PROCESSOR_PORT = 1700
         const val AUCTIONEER_PORT = 1500
         const val AUCTIONEER_HOST = "localhost"
+
+        const val LOGGER_HOST = "localhost"
+        const val LOGGER_PORT = 54545
     }
 
     init {
@@ -77,6 +84,7 @@ class BiddingProcessorMicroservice {
                     val message = Message.deserialize(it.toByteArray())
                     println(message)
                     processedBidsQueue.add(message)
+
                 },
                 onComplete = {
                     // s-a incheiat primirea tuturor mesajelor
@@ -99,10 +107,23 @@ class BiddingProcessorMicroservice {
         println("Castigatorul este: ${winner?.sender}")
 
         try {
+            val log = Message.create("BiddingProcessorMicroservice", "castigatorul este: ${winner?.sender}")
+            loggerSocket = Socket(LOGGER_HOST, LOGGER_PORT)
+
+            loggerSocket.getOutputStream().write(log.serialize())
+            loggerSocket.close()
+        } catch (e: Exception) {
+            println("Nu ma pot connecta la Logger.")
+        }
+
+        try {
             auctioneerSocket = Socket(AUCTIONEER_HOST, AUCTIONEER_PORT)
+
 
             // se trimite castigatorul catre AuctioneerMicroservice
             auctioneerSocket.getOutputStream().write(winner!!.serialize())
+
+            //println("[DEBUG] ${Message.deserialize(winner.serialize())}")
             auctioneerSocket.close()
 
             println("Am anuntat castigatorul catre AuctioneerMicroservice.")

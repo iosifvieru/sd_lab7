@@ -1,0 +1,27 @@
+
+[08-04-2024 16:33:28] Logger >>> LoggingMicroservice se executa pe portul: 54545
+[08-04-2024 16:33:28] Logger >>> astept conexiuni!
+
+[08-04-2024 16:33:32] [Alexandru.Florin]-/127.0.0.1:55170 >>> licitez 5304
+[08-04-2024 16:33:32] [Adi.Dani]-/127.0.0.1:55166 >>> licitez 2126
+[08-04-2024 16:33:32] [Popescu.Andrei]-/127.0.0.1:55172 >>> licitez 3334
+[08-04-2024 16:33:32] [Marian.Florin]-/127.0.0.1:55194 >>> licitez 5100
+[08-04-2024 16:33:32] [Florian.Denis]-/127.0.0.1:55204 >>> licitez 9777
+[08-04-2024 16:33:32] [Dragos.Adi]-/127.0.0.1:55216 >>> licitez 2644
+[08-04-2024 16:33:32] [Popescu.Dragos]-/127.0.0.1:55212 >>> licitez 3787
+[08-04-2024 16:33:32] [Alex.Dragos]-/127.0.0.1:55184 >>> licitez 2286
+[08-04-2024 16:33:32] [Florian.Ion]-/127.0.0.1:55228 >>> licitez 7226
+[08-04-2024 16:33:32] [Cozma.Popescu]-/127.0.0.1:55260 >>> licitez 4258
+[08-04-2024 16:33:32] [Abel.Florian]-/127.0.0.1:55284 >>> licitez 5051
+[08-04-2024 16:33:32] [Dani.Denis]-/127.0.0.1:55262 >>> licitez 6378
+[08-04-2024 16:33:32] [Denis.Dragos]-/127.0.0.1:55244 >>> licitez 3055
+[08-04-2024 16:33:32] [Andrei.Andrei]-/127.0.0.1:55300 >>> licitez 2221
+[08-04-2024 16:33:32] [Dragos.Florin]-/127.0.0.1:55278 >>> licitez 8747
+[08-04-2024 16:33:32] [Cozma.Marian]-/127.0.0.1:55316 >>> licitez 4174
+[08-04-2024 16:33:32] [Alexandru.Marian]-/127.0.0.1:55320 >>> licitez 9384
+[08-04-2024 16:33:32] [Alexandru.Adi]-/127.0.0.1:55324 >>> licitez 2026
+[08-04-2024 16:33:33] [Adi.Popescu]-/127.0.0.1:55336 >>> licitez 3741
+[08-04-2024 16:33:33] [Denis.Florin]-/127.0.0.1:55346 >>> licitez 1036
+[08-04-2024 16:33:33] [Florian.Abel]-/127.0.0.1:55362 >>> licitez 1019
+[08-04-2024 16:33:48] BiddingProcessorMicroservice >>> castigatorul este: [Florian.Denis]-/127.0.0.1:55204
+[08-04-2024 16:33:48] AuctioneerMicroservice >>> [08-04-2024 16:33:48] 0.0.0.0/0.0.0.0:1500 >>> Licitatie castigata! Pret castigator: 9777
